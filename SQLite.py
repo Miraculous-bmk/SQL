@@ -15,10 +15,11 @@ def create_server_connection(host_name, user_name, user_password):
     return Connection
 
 # put our MySQL Terminal password
-pw = "add your own password"
+pw = "5565585Mira$"
 
 # Database name
 db = "mysql_python"
+db = "Panel_table_cube"
 connection = create_server_connection("localhost", "root", pw)
 
 # create mysql_python
@@ -155,6 +156,23 @@ columns = ["order_id", "customer_name", "product_name", "date_ordered", "quantit
            "unit_price", "phone_number"]
 df = pd.DataFrame(from_db, columns=columns)
 print(df)
+
+# Fetch all data from the orders table
+q1 = """SELECT * FROM orders"""
+results = read_query(connection, q1)
+
+# Convert the query result to a DataFrame
+columns = ["order_id", "customer_name", "product_name", "date_ordered", "quantity",
+           "unit_price", "phone_number"]
+df = pd.DataFrame(results, columns=columns)
+
+# Create a pivot table
+pivot_table = pd.pivot_table(df, values=['quantity', 'unit_price'],
+                             index=['customer_name', 'product_name'],
+                             aggfunc={'quantity': 'sum', 'unit_price': 'mean'})
+
+print("Pivot Table:")
+print(pivot_table)
 
 # Now let's close the connection
 if connection.is_connected():
