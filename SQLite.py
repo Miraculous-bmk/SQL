@@ -152,11 +152,6 @@ for result in results:
     result = list(result)
     from_db.append(result)
 
-columns = ["order_id", "customer_name", "product_name", "date_ordered", "quantity",
-           "unit_price", "phone_number"]
-df = pd.DataFrame(from_db, columns=columns)
-print(df)
-
 # Fetch all data from the orders table
 q1 = """SELECT * FROM orders"""
 results = read_query(connection, q1)
@@ -165,6 +160,7 @@ results = read_query(connection, q1)
 columns = ["order_id", "customer_name", "product_name", "date_ordered", "quantity",
            "unit_price", "phone_number"]
 df = pd.DataFrame(results, columns=columns)
+print(df)
 
 # Create a pivot table
 pivot_table = pd.pivot_table(df, values=['quantity', 'unit_price'],
